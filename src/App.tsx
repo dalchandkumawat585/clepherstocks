@@ -1,24 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import Chart from './components/Chart';
+import { Data, getData, getMonthlyData, getWeeklyData } from './utils/utils';
 
 function App() {
+  const [dailyData, setDailyData] = useState<Data[]>([]);
+  const [weeklyData, setWeeklyData] = useState<Data[]>([]);
+  const [monthlyData, setMonthlyData] = useState<Data[]>([]);
+
+  useEffect(() => {
+    getData().then((data) => setDailyData(data));
+    getWeeklyData().then((data) => setWeeklyData(data));
+    getMonthlyData().then((data) => setMonthlyData(data));
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='container'>
+        <h3>Daily</h3>
+        {dailyData && dailyData.length > 0 && <Chart data={dailyData} />}
+      </div>
+      <div className='container'>
+        <h3>Weekly</h3>
+        {weeklyData && weeklyData.length > 0 && <Chart data={weeklyData} />}
+      </div>
+      <div className='container'>
+        <h3>Monthly</h3>
+        {monthlyData && monthlyData.length > 0 && <Chart data={monthlyData} />}
+      </div>
     </div>
   );
 }
